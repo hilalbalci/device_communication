@@ -1,0 +1,36 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:14
+    container_name: iot_postgres_db
+    environment:
+      POSTGRES_USER: iot_user
+      POSTGRES_PASSWORD: iot_password
+      POSTGRES_DB: iot_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - iot_network
+    restart: always
+
+  web:
+    build: .
+    container_name: iot_web_app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - iot_network
+
+volumes:
+  postgres_data:
+
+networks:
+  iot_network:
+    driver: bridge
