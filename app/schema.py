@@ -10,7 +10,7 @@ class Device:
 
 
 @strawberry.type
-class Location:
+class DeviceLocation:
     latitude: float
     longitude: float
     timestamp: str
@@ -19,4 +19,4 @@ class Location:
 @strawberry.type
 class Query:
     list_devices: List[Device] = strawberry.field(resolver=list_devices)
-    last_location: List[Location] = strawberry.field(resolver=get_last_location)
+    last_location: List[DeviceLocation] = strawberry.field(resolver=get_last_location)
