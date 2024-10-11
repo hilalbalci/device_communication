@@ -10,7 +10,7 @@ class Device(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     description = Column(String, nullable=True)
-    locations = relationship("Location", back_populates="device", cascade="all, delete-orphan")
+    locations = relationship("DeviceLocation", back_populates="device", cascade="all, delete-orphan")
 
 
 class DeviceLocation(Base):
