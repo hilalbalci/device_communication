@@ -25,7 +25,6 @@ def upgrade() -> None:
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('description', sa.String(), nullable=True),
         sa.PrimaryKeyConstraint('id'),
-        sa.UniqueConstraint('name'),
         sa.Index('ix_devices_name', 'name'),
     )
     op.create_table(
