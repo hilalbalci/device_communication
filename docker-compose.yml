@@ -28,6 +28,44 @@ services:
     networks:
       - iot_network
 
+  rabbitmq-service:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: "rabbitmq-host"
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - iot_network
+
+  tcp_server:
+      build:
+        context: .
+        dockerfile: Dockerfile.tcp_server
+      container_name: iot_tcp_server
+      depends_on:
+        - rabbitmq-service
+      networks:
+        - iot_network
+      expose:
+        - "12345"
+      ports:
+        - "12345:12345"
+
+  consumer:
+    build: .
+    command: python app/consumer.py
+    depends_on:
+      - rabbitmq-service
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - iot_network
+
+
 volumes:
   postgres_data:
 
