@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Boolean
+from sqlalchemy.orm import relationship, Session
 
 from app.database import Base
 
@@ -13,6 +13,11 @@ class Device(Base):
     name = Column(String, unique=True, index=True)
     description = Column(String, nullable=True)
     locations = relationship("DeviceLocation", back_populates="device", cascade="all, delete-orphan")
+    is_deleted = Column(Boolean, default=False)
+
+    def soft_delete(self, session: Session):
+        self.is_deleted = True
+        session.commit()
 
 
 class DeviceLocation(Base):
