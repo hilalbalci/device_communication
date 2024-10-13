@@ -2,9 +2,9 @@ from typing import List, Optional
 
 import strawberry
 
-from app.graphql_resolvers import create_device, list_devices, list_locations, delete_device,\
-    list_location_by_device, get_device
-
+from app.graphql_resolvers import (create_device, delete_device, get_device,
+                                   list_devices, list_location_by_device,
+                                   list_locations)
 
 
 @strawberry.type

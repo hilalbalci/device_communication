@@ -1,14 +1,14 @@
 import uuid
-import pytest
 
+import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, StaticPool
+from sqlalchemy import StaticPool, create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.crud import get_last_location_of_every_device
-from app.database import get_db, Base
+from app.database import Base, get_db
 from app.main import app
-from app.models import DeviceLocation, Device
+from app.models import Device, DeviceLocation
 
 client = TestClient(app)
 

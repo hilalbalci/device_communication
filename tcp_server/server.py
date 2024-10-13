@@ -1,7 +1,12 @@
 import json
+import logging
 import socket
+import time
 
 import pika
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 def generate_location_data(request_data):
@@ -12,8 +17,7 @@ def generate_location_data(request_data):
 
 
 def start_tcp_server(host='0.0.0.0', port=12345):
-    print("TCP Socket is starting")
-    import time
+    logger.info("TCP Socket is starting")
     time.sleep(50)
     connection = pika.BlockingConnection(pika.URLParameters('amqp://guest:guest@rabbitmq-service:5672'))
     channel = connection.channel()
@@ -22,11 +26,10 @@ def start_tcp_server(host='0.0.0.0', port=12345):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         server_socket.bind((host, port))
         server_socket.listen(5)
-        print(f"TCP Socket started at {host}:{port}")
-
+        logger.info(f"TCP Socket started at {host}:{port}")
         while True:
             conn, addr = server_socket.accept()
-            print(f"TCP Socket connected by {addr}")
+            logger.info(f"TCP Socket connected by {addr}")
             data = conn.recv(1024).decode('utf-8')
             if data:
                 location_data = generate_location_data(data)
@@ -35,7 +38,7 @@ def start_tcp_server(host='0.0.0.0', port=12345):
                     routing_key='device_locations',
                     body=json.dumps(location_data)
                 )
-                print(f"TCP Socket sent data: {location_data} to the queue")
+                logger.info(f"TCP Socket sent data: {location_data} to the queue")
                 response = json.dumps({"status": "success", "message": "Location data received"})
                 conn.sendall(response.encode('utf-8'))
 

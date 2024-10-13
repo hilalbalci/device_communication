@@ -3,10 +3,10 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from app.crud import create_device as crud_create_device
+from app.crud import delete_device as crud_delete_device
 from app.crud import get_device as crud_get_device
 from app.crud import get_last_location_of_every_device
 from app.crud import list_devices as crud_list_devices
-from app.crud import delete_device as crud_delete_device
 from app.crud import list_location_by_device as crud_list_location_by_device
 from app.database import SessionLocal
 from app.models import Device, DeviceLocation
